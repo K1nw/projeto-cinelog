@@ -17,11 +17,17 @@ def salvar_filmes():
 #funções de sistema
 def adicionar_filme():
     filme = {}
-    filme["titulo"] = input("Título do filme: ")
 
+    filme["titulo"] = input("Título do filme ( 0 para voltar ): ")
+    if filme["titulo"] == "0":
+        return
+    
     while True:
         try:
-            nota = float(input("Nota (1 a 10): "))
+            nota = float(input("Nota (1 a 10) ou 0 para voltar : "))
+
+            if nota == 0:
+                return
 
             if 1 <= nota <= 10:
                 filme["nota"] = nota
@@ -44,6 +50,7 @@ def listar_filmes():
             print(f"Nota: {filme['nota']}")
             print(f"Review: {filme['review']}")
             print("-" * 20)
+
 def carregar_filmes():
     global filmes
     try:
@@ -58,25 +65,28 @@ def editar_filme():
         print("Nenhum filme para editar")
         return
     print("Escolha o Número do filme que deseja Editar:")
+    print("0 - voltar")
     for numero, filme in enumerate(filmes, start=1):
         print(f"{numero} - {filme['titulo']}")
-
+    
     opcao = int(input("Digite o número do filme: "))
+    if opcao == 0:
+        return
     filme = filmes[opcao - 1]
     print(f"Título: {filme['titulo']}")
     print(f"Nota: {filme['nota']}")
     print(f"Review: {filme['review']}")
-    opcao = input("Deseja alterar o titulo, nota ou review?: ").lower()
-    if opcao not in ["titulo", "nota", "review"]:
+    campo = input("Deseja alterar o titulo, nota ou review?: ").lower()
+    if campo not in ["titulo", "nota", "review"]:
         print("Digite uma opção válida.")
         return
-    if opcao == "titulo":
+    if campo == "titulo":
         novo_titulo = input("Novo título: ")
         filme["titulo"] = novo_titulo
-    elif opcao == "nota":
+    elif campo == "nota":
         nova_nota = float(input("Nova nota: "))
         filme["nota"] = nova_nota
-    elif opcao == "review":
+    elif campo == "review":
         novo_review = input("Nova review: ")
         filme["review"] = novo_review
     with open("filmes.json", "w", encoding="utf-8") as arquivo:
@@ -87,12 +97,13 @@ def excluir_filme():
         print("Nenhum filme para excluir.")
         return
     print("Escolha o Número do filme que deseja excluir:")
+    print("0 - Voltar")
     for numero, filme in enumerate(filmes, start=1):
         print(f"{numero} - {filme['titulo']}")
-
-    opcao = int(input("Digite o número do filme para Excluir: "))
+    opcao = int(input("Digite o número do filme para excluir: "))
+    if opcao == 0:
+        return
     filme = filmes[opcao - 1]
-    
     print(f"Deseja mesmo excluir o filme: {filme['titulo']} (número {opcao})? s/n")
     confirmar = input().strip().lower()
     if confirmar not in ['s', 'y', 'sim', 'yes']:
