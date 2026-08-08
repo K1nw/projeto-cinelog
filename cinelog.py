@@ -1,33 +1,41 @@
 import json
-
 filmes = []
 
 def mostrar_menu():
     print("=== CineLog ===")
     print("1 - Adicionar Filmes")
     print("2 - Listar Filmes")
-    print("3 - Sair")
+    print("3 - Editar Filmes")
+    print("4 - Sair")
+
+#função de arquivo
 def salvar_filmes():
     with open("filmes.json", "w", encoding="utf-8") as arquivo:
         json.dump(filmes, arquivo, ensure_ascii=False, indent=4)
+
+#funções de sistema
 def adicionar_filme():
     filme = {}
     filme["titulo"] = input("Título do filme: ")
 
     while True:
-        nota = float(input("Nota (1 a 10): "))
-        if 1 <= nota <= 10:
-            filme["nota"] = nota
-            break
-        else:
-            print("Nota inválida. Digite um número de 1 a 10.")
+        try:
+            nota = float(input("Nota (1 a 10): "))
 
+            if 1 <= nota <= 10:
+                filme["nota"] = nota
+                break
+            else:
+                print("Nota inválida.")
+        except ValueError:
+            print("Digite apenas números.")
     filme["review"] = input("Review: ")
     filmes.append(filme)
-    salvar_filmes()   
+    salvar_filmes()
     print("Filme adicionado com sucesso!")
+
 def listar_filmes():
-    if len(filmes) == 0:
+    if not filmes:
         print("Nenhum filme cadastrado.")
     else:
         for filme in filmes:
@@ -43,6 +51,39 @@ def carregar_filmes():
     except FileNotFoundError:
         filmes = []
 carregar_filmes()
+
+def editar_filme():
+    if not filmes:
+        print("Nenhum filme para editar")
+        return
+    print("Escolha o Número do filme que deseja Editar:")
+    for numero, filme in enumerate(filmes, start=1):
+        print(f"{numero} - {filme['titulo']}")
+
+    opcao = int(input("Digite o número do filme: "))
+    filme = filmes[opcao - 1]
+    print(f"Título: {filme['titulo']}")
+    print(f"Nota: {filme['nota']}")
+    print(f"Review: {filme['review']}")
+    opcao = input("Deseja alterar o titulo, nota ou review?: ").lower()
+    if opcao not in ["titulo", "nota", "review"]:
+        print("Digite uma opção válida.")
+        return
+    if opcao == "titulo":
+        novo_titulo = input("Novo título: ")
+        filme["titulo"] = novo_titulo
+    elif opcao == "nota":
+        nova_nota = float(input("Nova nota: "))
+        filme["nota"] = nova_nota
+    elif opcao == "review":
+        novo_review = input("Nova review: ")
+        filme["review"] = novo_review
+    with open("filmes.json", "w", encoding="utf-8") as arquivo:
+        json.dump(filmes, arquivo, ensure_ascii=False, indent=4)
+
+print("Seu filme foi Editado com sucesso! ")
+
+# Menu principal
 while True:
     mostrar_menu()
     opcao = input("Escolha uma opção: ")
@@ -52,7 +93,10 @@ while True:
     elif opcao == "2":
         listar_filmes()
     elif opcao == "3":
-        print("Saindo do CineLog...")
+        editar_filme()
+    elif opcao == "4":
+        print("Saindo do Cinelog")
+    
         break
     else:
         print("Opção inválida.")

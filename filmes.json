@@ -1,1 +1,12 @@
-[]
+[
+    {
+        "titulo": "superman",
+        "nota": 4.0,
+        "review": "muito top"
+    },
+    {
+        "titulo": "cu",
+        "nota": 1.0,
+        "review": "mui ruim"
+    }
+]
