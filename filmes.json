@@ -1,12 +1,52 @@
 [
     {
-        "titulo": "ai ai ",
-        "nota": 10.0,
-        "review": "muito top"
+        "titulo": "Interestelar",
+        "nota": 9.5,
+        "review": "Uma obra-prima da ficção científica."
     },
     {
-        "titulo": "superman",
-        "nota": 5.0,
-        "review": "muito top guys"
+        "titulo": "O Poderoso Chefão",
+        "nota": 10.0,
+        "review": "Um clássico absoluto."
+    },
+    {
+        "titulo": "Batman: O Cavaleiro das Trevas",
+        "nota": 9.0,
+        "review": "Excelente filme de herói."
+    },
+    {
+        "titulo": "A Origem",
+        "nota": 9.0,
+        "review": "Uma história complexa e muito bem construída."
+    },
+    {
+        "titulo": "Clube da Luta",
+        "nota": 8.5,
+        "review": "Filme estranho, intenso e muito marcante."
+    },
+    {
+        "titulo": "Matrix",
+        "nota": 9.5,
+        "review": "Um dos filmes mais importantes da ficção científica."
+    },
+    {
+        "titulo": "Duna",
+        "nota": 9.0,
+        "review": "Visual incrível e ótima adaptação."
+    },
+    {
+        "titulo": "Duna: Parte Dois",
+        "nota": 9.5,
+        "review": "Uma continuação ainda maior e melhor."
+    },
+    {
+        "titulo": "Oppenheimer",
+        "nota": 9.0,
+        "review": "Excelente narrativa e atuações."
+    },
+    {
+        "titulo": "Parasita",
+        "nota": 9.5,
+        "review": "Filme brilhante e cheio de camadas."
     }
 ]
