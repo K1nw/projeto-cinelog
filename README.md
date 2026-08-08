@@ -33,7 +33,7 @@ O objetivo é transformar um simples CRUD em uma aplicação completa com interf
 ## 🔜 Próximas funcionalidades
 
 - Editar filmes - ✅
-- Excluir filmes - ⌛
+- Excluir filmes - ✅
 - Buscar por título - ⌛
 - Ordenar por nota - ⌛
 - Favoritar filmes -⌛
