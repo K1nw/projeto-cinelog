@@ -73,12 +73,11 @@ def editar_filme():
     if opcao == 0:
         return
     filme = filmes[opcao - 1]
-    print(f"Título: {filme['titulo']}")
-    print(f"Nota: {filme['nota']}")
-    print(f"Review: {filme['review']}")
-    campo = input("Deseja alterar o titulo, nota ou review?: ").lower()
-    if campo not in ["titulo", "nota", "review"]:
-        print("Digite uma opção válida.")
+    
+    print(f'Título: {filme["titulo"]}\nNota: {filme["nota"]}\nReview: {filme["review"]}\n')
+    campo = input(f"Deseja Editar qual Parte?: ").lower().strip()
+    if campo not in {"titulo", "nota", "review"}:
+        print("Escolha uma opção válida.")
         return
     if campo == "titulo":
         novo_titulo = input("Novo título: ")
