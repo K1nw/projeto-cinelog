@@ -25,10 +25,8 @@ def adicionar_filme():
     while True:
         try:
             nota = float(input("Nota (1 a 10) ou 0 para voltar : "))
-
             if nota == 0:
                 return
-
             if 1 <= nota <= 10:
                 filme["nota"] = nota
                 break
@@ -64,32 +62,69 @@ def editar_filme():
     if not filmes:
         print("Nenhum filme para editar")
         return
+
     print("Escolha o Número do filme que deseja Editar:")
     print("0 - voltar")
+
     for numero, filme in enumerate(filmes, start=1):
         print(f"{numero} - {filme['titulo']}")
-    
-    opcao = int(input("Digite o número do filme: "))
-    if opcao == 0:
-        return
+
+    while True:
+        try:
+            opcao = int(input("Digite o número do filme: "))
+
+            if opcao == 0:
+                print("Voltando ao menu...")
+                return
+
+            if opcao < 1 or opcao > len(filmes):
+                print("Erro: Número inválido! Escolha um filme da lista.")
+                continue
+
+            break
+
+        except ValueError:
+            print("Digite apenas números.")
+
     filme = filmes[opcao - 1]
-    
-    print(f'Título: {filme["titulo"]}\nNota: {filme["nota"]}\nReview: {filme["review"]}\n')
-    campo = input(f"Deseja Editar qual Parte?: ").lower().strip()
-    if campo not in {"titulo", "nota", "review"}:
-        print("Escolha uma opção válida.")
-        return
+
+    print(f'Título: {filme["titulo"]}\n'f'Nota: {filme["nota"]}\n'f'Review: {filme["review"]}\n')
+
+    while True:
+        campo = input("Deseja editar qual parte? titulo / nota / review: ").lower().strip()
+
+        if campo not in {"titulo", "nota", "review"}:
+            print("Escolha uma opção válida.")
+            continue
+
+        break
+
     if campo == "titulo":
         novo_titulo = input("Novo título: ")
         filme["titulo"] = novo_titulo
+
     elif campo == "nota":
-        nova_nota = float(input("Nova nota: "))
-        filme["nota"] = nova_nota
+        while True:
+            try:
+                nova_nota = float(input("Nova nota: "))
+
+                if 1 <= nova_nota <= 10:
+                    filme["nota"] = nova_nota
+                    break
+                else:
+                    print("Nota inválida.")
+
+            except ValueError:
+                print("Digite apenas números.")
+
     elif campo == "review":
         novo_review = input("Nova review: ")
         filme["review"] = novo_review
+
     with open("filmes.json", "w", encoding="utf-8") as arquivo:
         json.dump(filmes, arquivo, ensure_ascii=False, indent=4)
+
+    print("Filme editado com sucesso!")
 
 def excluir_filme():
     if not filmes:
@@ -116,7 +151,6 @@ def excluir_filme():
 while True:
     mostrar_menu()
     opcao = input("Escolha uma opção: ")
-
     if opcao == "1":
         adicionar_filme()
     elif opcao == "2":
