@@ -1,33 +1,32 @@
-/* 1. VARIÁVEIS DE CORES (Inspirado no visual escuro do Letterboxd) */
 :root {
-    --fundo-principal: #14181c; /* Azul escuro quase preto */
-    --fundo-card: #1c252d;      /* Cinza azulado para destacar os cards */
-    --texto-claro: #9ab;        /* Texto cinza claro, confortável para ler */
-    --texto-destaque: #fff;     /* Branco para títulos */
-    --cor-nota: #ffb020;        /* Amarelo dourado para as estrelas */
-    --cor-botao: #00b020;       /* Verde vibrante para ações */
+    --fundo-principal: #14181c; 
+    --fundo-card: #1c252d;      
+    --texto-claro: #9ab;        
+    --texto-destaque: #fff;     
+    --cor-nota: #ffb020;        
+    --cor-botao: #00b020;       
 }
 
-/* 2. RESET (Limpa as configurações padrão chatas do navegador) */
+
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Garante que bordas não quebrem o tamanho das caixas */
+    box-sizing: border-box; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 3. ESTILO DO CORPO DO SITE */
+
 body {
     background-color: var(--fundo-principal);
     color: var(--texto-claro);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centraliza todo o conteúdo do site no meio da tela */
+    align-items: center; 
     min-height: 100vh;
 }
 
-/* 4. COMPONENTE: HEADER (Topo) */
+
 header {
     text-align: center;
     margin-bottom: 2rem;
@@ -39,17 +38,16 @@ header h1 {
     margin-bottom: 0.5rem;
 }
 
-/* 5. COMPONENTE: BARRA DE FILTROS (Ações) */
 .barra-filtros {
     display: flex;
-    gap: 1rem; /* Dá um espaço elegante entre a barra de busca e o botão */
+    gap: 1rem; 
     width: 100%;
-    max-width: 600px; /* Não deixa a barra espalhar demais em telas grandes */
+    max-width: 600px; 
     margin-bottom: 3rem;
 }
 
 .barra-filtros input {
-    flex: 1; /* Faz a barra de texto ocupar todo o espaço restante disponível */
+    flex: 1; 
     padding: 0.8rem;
     border: none;
     border-radius: 4px;
@@ -67,19 +65,18 @@ header h1 {
     cursor: pointer;
 }
 
-/* 6. CONTAINER DA VITRINE */
+
 .container-vitrine {
     width: 100%;
     max-width: 600px;
 }
 
-/* 7. COMPONENTE: CARD DE FILME (O bloco reaproveitável) */
 .card-filme {
     background-color: var(--fundo-card);
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 1rem;
-    border: 1px solid #24303c; /* Uma borda sutil para dar profundidade */
+    border: 1px solid #24303c; 
 }
 
 .card-filme h3 {
@@ -92,11 +89,11 @@ header h1 {
     color: var(--cor-nota);
     font-weight: bold;
     font-size: 0.9rem;
-    display: block; /* Força a review a ir para baixo da nota */
+    display: block; 
     margin-bottom: 1rem;
 }
 
 .card-filme .review {
     font-style: italic;
-    line-height: 1.5; /* Dá mais espaço entre as linhas do texto */
+    line-height: 1.5; 
 }
