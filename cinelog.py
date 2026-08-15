@@ -8,7 +8,9 @@ def mostrar_menu():
     print("3 - Editar Filmes")
     print("4 - Excluir Filmes")
     print("5 - Estatísticas")
-    print("6 - Sair")
+    print("6 - Buscar Filmes")
+    print("7 - Ordenar Filmes por Nota")
+    print("8 - Sair")
 
 #função de arquivo
 def salvar_filmes():
@@ -161,6 +163,33 @@ def user_stats():
     print(f"Filme com maior nota: {maior['titulo']} - Nota: {maior['nota']}")
     print(f"Filme com menor nota: {menor['titulo']} - Nota: {menor['nota']}")
 
+def buscar_filme():
+    if not filmes:
+        print("Nenhum filme cadastrado.")
+        return
+    termo = input("Digite o título ou parte do título do filme: ").lower()
+    encontrados = [filme for filme in filmes if termo in filme["titulo"].lower()]
+    if not encontrados:
+        print("Nenhum filme encontrado.")
+    else:
+        for filme in encontrados:
+            print(f"Título: {filme['titulo']}")
+            print(f"Nota: {filme['nota']}")
+            print(f"Review: {filme['review']}")
+            print("-" * 20)
+
+def ordenar_filmes_por_nota():
+    if not filmes:
+        print("Nenhum filme cadastrado.")
+        return
+    filmes_ordenados = sorted(filmes, key=lambda x: x["nota"], reverse=True)
+    for filme in filmes_ordenados:
+        print(f"Título: {filme['titulo']}")
+        print(f"Nota: {filme['nota']}")
+        print(f"Review: {filme['review']}")
+        print("-" * 20)
+
+
 # Menu principal
 while True:
     mostrar_menu()
@@ -178,6 +207,12 @@ while True:
         print("Suas estatísticas")
         user_stats()
     elif opcao == "6":
+        print("buscar filmes")
+        buscar_filme()
+    elif opcao == "7":
+        print("Ordernar filmes por nota")
+        ordenar_filmes_por_nota()
+    elif opcao == "8":
         print("Saindo do Cinelog")
         break
     else:
