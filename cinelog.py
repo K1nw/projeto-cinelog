@@ -7,7 +7,8 @@ def mostrar_menu():
     print("2 - Listar Filmes")
     print("3 - Editar Filmes")
     print("4 - Excluir Filmes")
-    print("5 - Sair")
+    print("5 - Estatísticas")
+    print("6 - Sair")
 
 #função de arquivo
 def salvar_filmes():
@@ -71,7 +72,7 @@ def editar_filme():
 
     while True:
         try:
-            opcao = int(input("Digite o número do filme: "))
+            opcao = int(input("Digite o número do filme (0 para voltar): "))
 
             if opcao == 0:
                 print("Voltando ao menu...")
@@ -147,6 +148,19 @@ def excluir_filme():
     salvar_filmes()
     print("Filme excluído com sucesso!")
 
+def user_stats():
+    if not filmes:
+        print("Nenhum filme cadastrado.")
+        return
+    total_filmes = len(filmes)
+    media_nota = sum(filme["nota"] for filme in filmes) / total_filmes
+    print(f"Total de filmes: {total_filmes}")
+    print(f"Média das notas: {media_nota:.2f}")
+    maior = max(filmes, key=lambda x: x["nota"])
+    menor = min(filmes, key=lambda x: x["nota"])
+    print(f"Filme com maior nota: {maior['titulo']} - Nota: {maior['nota']}")
+    print(f"Filme com menor nota: {menor['titulo']} - Nota: {menor['nota']}")
+
 # Menu principal
 while True:
     mostrar_menu()
@@ -161,6 +175,9 @@ while True:
         print("Excluir filmes")
         excluir_filme()
     elif opcao == "5":
+        print("Suas estatísticas")
+        user_stats()
+    elif opcao == "6":
         print("Saindo do Cinelog")
         break
     else:

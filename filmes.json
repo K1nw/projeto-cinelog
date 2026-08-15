@@ -48,5 +48,10 @@
         "titulo": "Parasita",
         "nota": 9.5,
         "review": "Filme brilhante e cheio de camadas."
+    },
+    {
+        "titulo": "cavaleiro das trevas",
+        "nota": 9.0,
+        "review": "muito bom o filme"
     }
 ]
