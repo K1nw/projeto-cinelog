@@ -7,18 +7,107 @@ function desenharCardsNaTela(filmes) {
     if (!containerVitrine) return;
     containerVitrine.innerHTML = '';
 
-    filmes.forEach(filme => {
+if (filmes.length === 0) {
+    containerVitrine.innerHTML = `
+        <div class="estado-vazio">
+            <div class="estado-vazio-icone">🎬</div>
+            <h3>Nenhum filme encontrado</h3>
+            <p>Tente buscar por outro título.</p>
+        </div>
+    `;
+    return;
+}
+
+     filmes.forEach((filme, index) => {
+
         const cardHtml = `
-            <div class="card-filme" data-id="${filme.id}" data-nota="${filme.nota}">
+            <div
+                class="card-filme"
+                data-id="${filme.id}"
+                data-nota="${filme.nota}"
+                style="animation-delay: ${index * 0.06}s"
+            >
                 <h3>${filme.titulo}</h3>
                 <span class="nota">⭐ ${filme.nota}/10</span>
                 <p class="review">"${filme.review}"</p>
                 <button class="btn-excluir">Excluir</button>
             </div>
         `;
+
         containerVitrine.innerHTML += cardHtml;
     });
+
+    ativarInteracoesDosCards();
+    ativarAnimacaoDeScroll();
 }
+function ativarInteracoesDosCards() {
+
+    const cards = document.querySelectorAll('.card-filme');
+
+    cards.forEach(card => {
+
+        card.addEventListener('mousemove', evento => {
+
+            const rect = card.getBoundingClientRect();
+
+            const x = evento.clientX - rect.left;
+            const y = evento.clientY - rect.top;
+
+            const centroX = rect.width / 2;
+            const centroY = rect.height / 2;
+
+            const rotacaoY = ((x - centroX) / centroX) * 3;
+            const rotacaoX = ((y - centroY) / centroY) * -3;
+
+            card.style.transform = `
+                perspective(800px)
+                rotateX(${rotacaoX}deg)
+                rotateY(${rotacaoY}deg)
+                scale(1.015)
+            `;
+        });
+
+        card.addEventListener('mouseleave', () => {
+
+            card.style.transform = `
+                perspective(800px)
+                rotateX(0deg)
+                rotateY(0deg)
+                scale(1)
+            `;
+        });
+    });
+}
+
+function ativarAnimacaoDeScroll() {
+
+    const cards = document.querySelectorAll('.card-filme');
+
+    const observador = new IntersectionObserver((entradas) => {
+
+        entradas.forEach(entrada => {
+
+            if (entrada.isIntersecting) {
+
+                entrada.target.classList.add('aparecendo');
+                entrada.target.classList.remove('saindo');
+
+                observador.unobserve(entrada.target);
+            }
+        });
+
+    }, {
+        threshold: 0.15
+    });
+
+    cards.forEach(card => {
+
+        card.classList.add('saindo');
+
+        observador.observe(card);
+    });
+}
+
 // Modal
 const modal = document.getElementById('modal-adicionar');
 const btnAdicionar = document.querySelector('.barra-filtros button');
@@ -68,9 +157,9 @@ if (formAdicionar) {
         })
         .then(filmeNovo => {
             console.log('Filme adicionado:', filmeNovo);
-            formAdicionar.reset();          // Limpa o formulário
-            modal.style.display = 'none';   // Fecha o modal
-            carregarFilmesDoServidor();     // Atualiza a lista
+            formAdicionar.reset();          
+            modal.style.display = 'none';   
+            carregarFilmesDoServidor();     
         })
         .catch(erro => {
             console.error(erro);
@@ -79,7 +168,6 @@ if (formAdicionar) {
     });
 }
 
-//botão excluir filme
 function excluirFilme(id) {
     fetch(`http://127.0.0.1:5000/api/filmes/${id}`, {
         method: 'DELETE'
@@ -92,7 +180,6 @@ function excluirFilme(id) {
     })
     .then(dados => {
         console.log(dados.mensagem);
-        // Recarrega a lista depois de excluir
         carregarFilmesDoServidor();
     })
     .catch(erro => {
@@ -139,3 +226,42 @@ if (barraBusca) {
 }
 
 carregarFilmesDoServidor();
+
+function ativarInteracoesDosCards() {
+
+    const cards = document.querySelectorAll('.card-filme');
+
+    cards.forEach(card => {
+
+        card.addEventListener('mousemove', evento => {
+
+            const rect = card.getBoundingClientRect();
+
+            const x = evento.clientX - rect.left;
+            const y = evento.clientY - rect.top;
+
+            const centroX = rect.width / 2;
+            const centroY = rect.height / 2;
+
+            const rotacaoY = ((x - centroX) / centroX) * 3;
+            const rotacaoX = ((y - centroY) / centroY) * -3;
+
+            card.style.transform = `
+                perspective(800px)
+                rotateX(${rotacaoX}deg)
+                rotateY(${rotacaoY}deg)
+                scale(1.015)
+            `;
+        });
+
+        card.addEventListener('mouseleave', () => {
+
+            card.style.transform = `
+                perspective(800px)
+                rotateX(0deg)
+                rotateY(0deg)
+                scale(1)
+            `;
+        });
+    });
+}

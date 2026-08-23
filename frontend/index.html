@@ -28,32 +28,31 @@
 </div>
 <body>
 
-    <header>
-        <h1>CineLog</h1>
-        <div class="barra-filtros">
-            <input type="text" placeholder="Buscar filme pelo título...">
-            <button type="button">+ Adicionar</button>
+ <header class="header-principal">
+
+    <div class="logo-area">
+        <div class="logo-cine">
+            <span>▶</span>
         </div>
-    </header>
+
+        <div class="logo-texto">
+            <h1>CineLog</h1>
+            <p>Sua coleção de filmes</p>
+        </div>
+    </div>
+
+    <div class="barra-filtros">
+        <div class="campo-busca">
+            <span>⌕</span>
+            <input type="text" placeholder="Buscar filme pelo título...">
+        </div>
+
+        <button type="button">+ Adicionar</button>
+    </div>
+
+</header>
 
     <main class="container-vitrine">
-        <div class="card-filme" data-nota="9.5">
-            <h3>Interestelar</h3>
-            <span class="nota">⭐ 9.5/10</span>
-            <p class="review">"Uma obra-prima da ficção científica."</p>
-        </div>
-
-        <div class="card-filme" data-nota="8.5">
-            <h3>Clube da Luta</h3>
-            <span class="nota">⭐ 8.5/10</span>
-            <p class="review">"Filme estranho, intenso e muito marcante."</p>
-        </div>
-
-        <div class="card-filme" data-nota="10.0">
-            <h3>O Poderoso Chefão</h3>
-            <span class="nota">⭐ 10.0/10</span>
-            <p class="review">"Um clássico absoluto."</p>
-        </div>
     </main>
 
     <script src="script.js"></script>
