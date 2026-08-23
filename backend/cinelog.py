@@ -189,7 +189,6 @@ def ordenar_filmes_por_nota():
         print(f"Review: {filme['review']}")
         print("-" * 20)
 
-
 # Menu principal
 while True:
     mostrar_menu()

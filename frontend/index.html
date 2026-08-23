@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cinelog</title>
+    <title>CineLog</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <!-- Vitrine onde os filmes vão aparecer -->
-    <main class="lista-filmes">
-        <!-- Card 1 -->
+
+    <header>
+        <h1>CineLog</h1>
+        <div class="barra-filtros">
+            <input type="text" placeholder="Buscar filme pelo título...">
+            <button type="button">+ Adicionar</button>
+        </div>
+    </header>
+
+    <main class="container-vitrine">
         <div class="card-filme" data-nota="9.5">
             <h3>Interestelar</h3>
             <span class="nota">⭐ 9.5/10</span>
             <p class="review">"Uma obra-prima da ficção científica."</p>
         </div>
 
-        <!-- Card 2 -->
         <div class="card-filme" data-nota="8.5">
             <h3>Clube da Luta</h3>
             <span class="nota">⭐ 8.5/10</span>
             <p class="review">"Filme estranho, intenso e muito marcante."</p>
         </div>
 
-        <!-- Card 3 -->
         <div class="card-filme" data-nota="10.0">
             <h3>O Poderoso Chefão</h3>
             <span class="nota">⭐ 10.0/10</span>
@@ -32,8 +36,6 @@
         </div>
     </main>
 
-
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
