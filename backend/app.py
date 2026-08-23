@@ -8,8 +8,6 @@ CORS(app)
 
 ARQUIVO_BANCO = os.path.join(os.path.dirname(__file__), 'filmes.json')
 
-#função carregar filmes
-
 def carregar_filmes():
     if not os.path.exists(ARQUIVO_BANCO):
         filmes_iniciais = [
@@ -47,8 +45,6 @@ def obter_filmes():
     filmes = carregar_filmes()
     return jsonify(filmes)
 
-#função adicionar filme
-
 @app.route('/api/filmes', methods=['POST'])
 def adicionar_filme():
     dados = request.get_json()
@@ -73,8 +69,6 @@ def adicionar_filme():
     salvar_filmes(filmes)
 
     return jsonify(novo_filme), 201
-
-#função deletar filme
 
 @app.route('/api/filmes/<int:id>', methods=['DELETE'])
 def deletar_filme(id):

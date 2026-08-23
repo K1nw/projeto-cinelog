@@ -97,3 +97,101 @@ header h1 {
     font-style: italic;
     line-height: 1.5; 
 }
+
+
+/* MODAL*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
+.modal-conteudo {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    margin: 7% auto;
+    padding: 28px 32px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 420px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    position: relative;
+    animation: aparecer 0.25s ease;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fechar-modal {
+    position: absolute;
+    right: 18px;
+    top: 14px;
+    font-size: 26px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.fechar-modal:hover {
+    color: #fff;
+}
+
+.modal-conteudo h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.modal-conteudo label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.modal-conteudo input,
+.modal-conteudo textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.modal-conteudo input:focus,
+.modal-conteudo textarea:focus {
+    outline: none;
+    border-color: #e50914;
+}
+
+.modal-conteudo button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-conteudo button[type="submit"]:hover {
+    background-color: #b20710;
+}
