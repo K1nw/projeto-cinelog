@@ -1,12 +1,16 @@
 :root {
-    --fundo-principal: #14181c; 
-    --fundo-card: #1c252d;      
-    --texto-claro: #9ab;        
-    --texto-destaque: #fff;     
-    --cor-nota: #ffb020;        
-    --cor-botao: #00b020;       
-}
+    --fundo-principal: #100E12;
+    --fundo-card: #19151F;
+    --texto-claro: #A8A3B3;
+    --texto-destaque: #F5F5F7;
 
+    --roxo: #7C3AED;
+    --laranja: #FF6B35;
+    --vermelho: #FF3B30;
+
+    --cor-nota: #FFB020;
+    --cor-botao: #FF6B35;
+}
 
 * {
     margin: 0;
@@ -99,7 +103,8 @@ header h1 {
 }
 
 
-/* MODAL*/
+/* MODAL */
+
 .modal {
     display: none;
     position: fixed;
@@ -108,18 +113,19 @@ header h1 {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(10, 8, 14, 0.75);
 }
 
 .modal-conteudo {
-    background-color: #1e1e1e;
-    color: #ffffff;
+    background-color: var(--fundo-card);
+    color: var(--texto-destaque);
     margin: 7% auto;
     padding: 28px 32px;
-    border-radius: 12px;
+    border-radius: 14px;
     width: 90%;
     max-width: 420px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
     position: relative;
     animation: aparecer 0.25s ease;
 }
@@ -129,6 +135,7 @@ header h1 {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -141,24 +148,26 @@ header h1 {
     top: 14px;
     font-size: 26px;
     cursor: pointer;
-    color: #aaa;
+    color: var(--texto-claro);
+    transition: color 0.2s;
 }
 
 .fechar-modal:hover {
-    color: #fff;
+    color: var(--texto-destaque);
 }
 
 .modal-conteudo h2 {
     margin-top: 0;
     margin-bottom: 20px;
     font-size: 1.4rem;
+    color: var(--texto-destaque);
 }
 
 .modal-conteudo label {
     display: block;
     margin-bottom: 6px;
     font-size: 0.9rem;
-    color: #ccc;
+    color: var(--texto-claro);
 }
 
 .modal-conteudo input,
@@ -166,32 +175,36 @@ header h1 {
     width: 100%;
     padding: 10px 12px;
     margin-bottom: 16px;
-    border: 1px solid #444;
+    border: 1px solid #30283A;
     border-radius: 8px;
-    background-color: #2a2a2a;
-    color: #fff;
+    background-color: #100E12;
+    color: var(--texto-destaque);
     font-size: 0.95rem;
     box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .modal-conteudo input:focus,
 .modal-conteudo textarea:focus {
     outline: none;
-    border-color: #e50914;
+    border-color: var(--roxo);
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
 }
 
 .modal-conteudo button[type="submit"] {
     width: 100%;
     padding: 12px;
-    background-color: #e50914;
+    background-color: var(--laranja);
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 1rem;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.15s;
 }
 
 .modal-conteudo button[type="submit"]:hover {
-    background-color: #b20710;
+    background-color: #E95727;
+    transform: translateY(-1px);
 }
