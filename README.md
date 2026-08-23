@@ -16,69 +16,78 @@ Um gerenciador de filmes desenvolvido em **Python**, com persistência de dados 
 
 ## 🚀 Tecnologias
 
-### Atualmente
+🐍 Python
+🌐 HTML5
+🎨 CSS3
+⚡ JavaScript
+📄 JSON
+✨ Funcionalidades
+✅ Adicionar filmes
+✅ Listar filmes
+✅ Avaliar filmes (1 a 10)
+✅ Escrever reviews
+✅ Editar filmes
+✅ Excluir filmes
+✅ Buscar filmes por título
+⌛ Ordenar filmes por nota
+⌛ Favoritar filmes
+⌛ Estatísticas
+⌛ Sistema de usuários
+⌛ Upload de pôsteres
+🔄 CRUD
 
-* 🐍 Python
-* 📄 JSON
-* 🌐 API REST
-* 🔄 CRUD
+O CineLog já possui as principais operações de um CRUD:
 
-### Futuramente
+Operação	Método	Status
+Criar filme	POST	✅
+Listar filmes	GET	✅
+Editar filme	PUT	✅
+Excluir filme	DELETE	✅
 
-* HTML5
-* CSS3
-* JavaScript
-* SQLite ou PostgreSQL
-* Flask ou Django
-* Git e GitHub
+Os dados são persistidos em um arquivo JSON, permitindo que os filmes continuem salvos mesmo após o encerramento da aplicação.
 
-## ✨ Funcionalidades
+🛠️ Backend
 
-* ✅ Adicionar filmes
-* ✅ Listar filmes
-* ✅ Avaliar filmes (1 a 10)
-* ✅ Escrever reviews
-* ✅ Editar filmes
-* ✅ Excluir filmes
-* ✅ Persistência de dados com JSON
-* ✅ Operações CRUD através da API
+O backend é desenvolvido em Python e atualmente utiliza JSON como forma de persistência.
 
-## 🔜 Próximas funcionalidades
+A API é responsável por:
 
-* ⌛ Buscar filmes por título
-* ⌛ Ordenar filmes por nota
-* ⌛ Favoritar filmes
-* ⌛ Estatísticas
-* ⌛ Interface Web
-* ⌛ Banco de Dados
-* ⌛ Sistema de usuários
-* ⌛ Upload de pôsteres
+Receber requisições do frontend
+Processar os dados dos filmes
+Realizar operações CRUD
+Salvar e carregar os dados do arquivo JSON
+🎨 Frontend
 
-## 📚 Objetivo
+O frontend utiliza:
 
-O CineLog faz parte do meu portfólio e está sendo desenvolvido para praticar e evoluir conhecimentos em:
+HTML5 para estrutura
+CSS3 para estilização
+JavaScript para interação com a API e manipulação da interface
+🔜 Próximas funcionalidades
+⌛ Ordenação por nota
+⌛ Sistema de favoritos
+⌛ Estatísticas dos filmes
+⌛ Migração do JSON para SQLite ou PostgreSQL
+⌛ Sistema de usuários
+⌛ Upload de pôsteres
+⌛ Melhorias na interface e responsividade
+🎯 Objetivo
 
-* Estruturas de dados
-* Organização de código
-* Manipulação de arquivos
-* Persistência de dados
-* APIs REST
-* CRUD
-* Métodos HTTP (`GET`, `POST`, `PUT` e `DELETE`)
-* Evolução de aplicações simples para aplicações Full Stack
+Este projeto faz parte do meu portfólio e está sendo desenvolvido para praticar:
 
-## 🛠️ Status do projeto
-
-O projeto está em desenvolvimento.
-
-Atualmente, o **backend básico já está funcional**, permitindo cadastrar, consultar, editar e excluir filmes, com os dados persistidos em um arquivo JSON.
-
-A próxima etapa será implementar funcionalidades de busca, ordenação e favoritos, seguida pela criação de uma interface Web e migração para um banco de dados.
-
-## 📷 Preview
+Estruturas de dados
+Organização de código
+Manipulação de arquivos
+Persistência de dados
+CRUD
+APIs REST
+Integração entre frontend e backend
+Desenvolvimento Full Stack
+Evolução de aplicações utilizando banco de dados
+📷 Preview
 
 Em breve.
 
-## 👨‍💻 Autor
+👨‍💻 Autor
 
-**Nathan Costa**
+Nathan Costa
