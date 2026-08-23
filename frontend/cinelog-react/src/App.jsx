@@ -1,49 +1,50 @@
+import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import SecaoConteudos from './components/SecaoConteudos'
 import './App.css'
 
-const conteudos = [
-    {
-        id: 1,
-        titulo: 'Interestelar',
-        tipo: 'Filme',
-        nota: 9.5
-    },
-    {
-        id: 2,
-        titulo: 'O Poderoso Chefão',
-        tipo: 'Filme',
-        nota: 10
-    },
-    {
-        id: 3,
-        titulo: 'Clube da Luta',
-        tipo: 'Filme',
-        nota: 8.5
-    },
-    {
-        id: 4,
-        titulo: 'Matrix',
-        tipo: 'Filme',
-        nota: 9
-    }
-]
-
 function App() {
+    const [filmes, setFilmes] = useState([])
+    const [populares, setPopulares] = useState([])
+    const [avaliados, setAvaliados] = useState([])
+
+    useEffect(() => {
+        fetch('http://127.0.0.1:5000/api/filmes')
+            .then(resposta => resposta.json())
+            .then(dados => setFilmes(dados))
+            .catch(erro => console.error('Erro ao carregar filmes:', erro))
+
+        fetch('http://127.0.0.1:5000/api/filmes/populares')
+            .then(resposta => resposta.json())
+            .then(dados => setPopulares(dados))
+            .catch(erro => console.error('Erro ao carregar populares:', erro))
+
+        fetch('http://127.0.0.1:5000/api/filmes/avaliados')
+            .then(resposta => resposta.json())
+            .then(dados => setAvaliados(dados))
+            .catch(erro => console.error('Erro ao carregar avaliados:', erro))
+    }, [])
+
     return (
         <>
             <Header />
 
             <main className="home">
+
                 <section className="hero">
                     <span>CINELOG</span>
-                    <h1>Seu universo de filmes, séries e animes.</h1>
+
+                    <h1>
+                        Seu universo de filmes, séries e animes.
+                    </h1>
+
                     <p>
                         Descubra, avalie e organize tudo o que você assiste.
                     </p>
 
                     <div className="barra-busca">
                         <span>⌕</span>
+
                         <input
                             type="text"
                             placeholder="Buscar filmes, séries e animes..."
@@ -53,28 +54,29 @@ function App() {
 
                 <SecaoConteudos
                     titulo="🔥 Em destaque"
-                    conteudos={conteudos}
+                    conteudos={populares}
                 />
 
                 <SecaoConteudos
                     titulo="⭐ Mais bem avaliados"
-                    conteudos={conteudos}
+                    conteudos={avaliados}
                 />
 
                 <SecaoConteudos
                     titulo="🎬 Filmes"
-                    conteudos={conteudos}
+                    conteudos={filmes}
                 />
 
                 <SecaoConteudos
-                titulo="📺 Séries"
-                    conteudos={conteudos}
+                    titulo="📺 Séries"
+                    conteudos={[]}
                 />
-                
+
                 <SecaoConteudos
-                titulo="🎌 Animes"
-                    conteudos={conteudos}
+                    titulo="🎌 Animes"
+                    conteudos={[]}
                 />
+
             </main>
         </>
     )

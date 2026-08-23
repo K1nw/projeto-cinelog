@@ -1,92 +1,73 @@
-import json
-import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from banco import (
+    listar_filmes,
+    buscar_filmes,
+    filmes_melhor_avaliados,
+    filmes_populares
+)
 
 app = Flask(__name__)
 CORS(app)
 
-ARQUIVO_BANCO = os.path.join(os.path.dirname(__file__), 'filmes.json')
 
-def carregar_filmes():
-    if not os.path.exists(ARQUIVO_BANCO):
-        filmes_iniciais = [
-            {"id": 1, "titulo": "Interestelar", "nota": 9.5, "review": "Uma obra-prima."},
-            {"id": 2, "titulo": "Matrix", "nota": 9.0, "review": "Revolucionário."}
-        ]
-        salvar_filmes(filmes_iniciais)
-        return filmes_iniciais
-
-    with open(ARQUIVO_BANCO, 'r', encoding='utf-8') as f:
-        filmes = json.load(f)
-
-    precisa_atualizar = False
-    maior_id = 0
-
-    for filme in filmes:
-        if "id" in filme and filme["id"] > maior_id:
-            maior_id = filme["id"]
-
-    for filme in filmes:
-        if "id" not in filme:
-            maior_id += 1
-            filme["id"] = maior_id
-            precisa_atualizar = True
-    if precisa_atualizar:
-        salvar_filmes(filmes)
-
-    return filmes
-def salvar_filmes(dados):
-    with open(ARQUIVO_BANCO, 'w', encoding='utf-8') as f:
-        json.dump(dados, f, ensure_ascii=False, indent=4)
-
-@app.route('/api/filmes', methods=['GET'])
-def obter_filmes():
-    filmes = carregar_filmes()
-    return jsonify(filmes)
-
-@app.route('/api/filmes', methods=['POST'])
-def adicionar_filme():
-    dados = request.get_json()
-
-    if not dados or 'titulo' not in dados:
-        return jsonify({"erro": "Título é obrigatório"}), 400
-
-    filmes = carregar_filmes()
-
-    novo_id = 1
-    if filmes:
-        novo_id = max(filme["id"] for filme in filmes) + 1
-
-    novo_filme = {
-        "id": novo_id,
-        "titulo": dados.get("titulo"),
-        "nota": dados.get("nota", 0),
-        "review": dados.get("review", "")
+def transformar_filme(filme):
+    return {
+        "id": filme[0],
+        "tmdb_id": filme[1],
+        "titulo": filme[2],
+        "titulo_original": filme[3],
+        "tipo": filme[4],
+        "sinopse": filme[5],
+        "data_lancamento": filme[6],
+        "nota_tmdb": filme[7],
+        "popularidade": filme[8],
+        "idioma": filme[9],
+        "poster_path": filme[10]
     }
 
-    filmes.append(novo_filme)
-    salvar_filmes(filmes)
 
-    return jsonify(novo_filme), 201
+@app.route("/api/filmes")
+def filmes():
+    resultados = listar_filmes()
 
-@app.route('/api/filmes/<int:id>', methods=['DELETE'])
-def deletar_filme(id):
-    filmes = carregar_filmes()
+    return jsonify([
+        transformar_filme(filme)
+        for filme in resultados
+    ])
 
-    filme_encontrado = None
-    for filme in filmes:
-        if filme["id"] == id:
-            filme_encontrado = filme
-            break
 
-    if filme_encontrado is None:
-        return jsonify({"erro": "Filme não encontrado"}), 404
+@app.route("/api/filmes/buscar")
+def buscar():
+    termo = request.args.get("q", "")
 
-    filmes.remove(filme_encontrado)
-    salvar_filmes(filmes)
+    resultados = buscar_filmes(termo)
 
-    return jsonify({"mensagem": "Filme deletado com sucesso"}), 200
+    return jsonify([
+        transformar_filme(filme)
+        for filme in resultados
+    ])
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+
+@app.route("/api/filmes/avaliados")
+def avaliados():
+    resultados = filmes_melhor_avaliados()
+
+    return jsonify([
+        transformar_filme(filme)
+        for filme in resultados
+    ])
+
+
+@app.route("/api/filmes/populares")
+def populares():
+    resultados = filmes_populares()
+
+    return jsonify([
+        transformar_filme(filme)
+        for filme in resultados
+    ])
+
+
+if __name__ == "__main__":
+    app.run()
