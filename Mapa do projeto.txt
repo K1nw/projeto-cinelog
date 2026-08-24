@@ -1,0 +1,961 @@
+CINELOG — MAPA DO PROJETO
+=============================
+
+Documento vivo de arquitetura, funcionalidades, decisões e próximos passos.
+Atualizar este arquivo conforme o projeto evoluir.
+
+Última atualização: 24/08/2026
+
+
+================================
+1. VISÃO DO PROJETO
+================================
+
+CineLog é uma plataforma inspirada em sites como Letterboxd, mas com identidade própria.
+
+Objetivo:
+- Catalogar filmes, séries e futuramente animes.
+- Exibir páginas individuais bem alimentadas.
+- Permitir avaliação, favoritos, watchlist e reviews.
+- Futuramente possuir sistema de usuário e perfil.
+- Ter uma interface moderna, viva, fluida e marcante.
+
+Identidade visual atual:
+- Fundo escuro.
+- Laranja forte como cor principal de ação/destaque.
+- Vermelho forte pode aparecer como cor de destaque.
+- Roxo pode ser usado como cor criativa/secundária.
+- Cards com transparência e bordas sutis.
+- Visual cinematográfico, moderno e convidativo.
+- Evitar copiar diretamente a identidade visual do Letterboxd.
+
+
+================================
+2. ARQUITETURA GERAL
+================================
+
+Fluxo principal dos dados:
+
+TMDB
+ ↓
+importar_filmes.py
+ ↓
+SQLite (cinelog.db)
+ ↓
+Flask (app.py)
+ ↓
+API REST
+ ↓
+React
+ ↓
+Interface do usuário
+
+
+Estrutura mental:
+
+FRONTEND
+→ mostra a interface e reage às ações do usuário.
+
+BACKEND
+→ recebe requisições, consulta o banco e devolve dados.
+
+BANCO
+→ armazena os dados.
+
+TMDB
+→ fornece dados externos de filmes.
+
+
+================================
+3. ESTRUTURA ATUAL
+================================
+
+CineLog/
+│
+├── README.md
+├── MAPA_DO_PROJETO.txt
+│
+├── backend/
+│   ├── app.py
+│   ├── banco.py
+│   ├── importar_filmes.py
+│   ├── cinelog.db
+│   └── .env
+│
+├── frontend/
+│   └── cinelog-react/
+│       ├── package.json
+│       ├── src/
+│       │   ├── App.jsx
+│       │   ├── App.css
+│       │   ├── components/
+│       │   │   ├── Header.jsx
+│       │   │   ├── HeroFilmes.jsx
+│       │   │   └── SecaoConteudos.jsx
+│       │   └── pages/
+│       │       ├── Filme.jsx
+│       │       └── Filme.css
+│       └── ...
+│
+└── iniciar_cinelog.bat
+
+
+================================
+4. BACKEND
+================================
+
+Tecnologias:
+- Python
+- Flask
+- Flask-CORS
+- SQLite
+- Requests
+- python-dotenv
+
+
+4.1 app.py
+-----------
+
+Responsabilidade:
+- Criar a aplicação Flask.
+- Configurar CORS.
+- Definir as rotas da API.
+- Transformar linhas do SQLite em objetos JSON.
+- Entregar os dados para o React.
+
+Função importante:
+
+transformar_filme(filme)
+
+Converte a tupla retornada pelo SQLite em um objeto com nomes de propriedades.
+
+Campos atuais enviados pela API:
+- id
+- tmdb_id
+- titulo
+- titulo_original
+- tipo
+- sinopse
+- data_lancamento
+- nota_tmdb
+- popularidade
+- idioma
+- poster_path
+- generos
+- diretor
+- elenco
+
+OBS:
+As novas colunas generos, diretor e elenco precisam estar incluídas na transformação quando necessário.
+
+
+4.2 banco.py
+------------
+
+Responsabilidade:
+- Conectar ao SQLite.
+- Criar a tabela.
+- Inserir conteúdos.
+- Buscar conteúdos.
+- Ordenar conteúdos.
+- Buscar filme por TMDB ID.
+- Atualizar a estrutura do banco quando novas colunas são necessárias.
+
+Banco:
+
+cinelog.db
+
+Tabela principal:
+
+conteudos
+
+
+Campos planejados/atuais:
+
+id                  INTEGER PRIMARY KEY AUTOINCREMENT
+tmdb_id             INTEGER UNIQUE
+titulo              TEXT NOT NULL
+titulo_original     TEXT
+tipo                TEXT NOT NULL
+sinopse             TEXT
+data_lancamento     TEXT
+nota_tmdb           REAL
+popularidade        REAL
+idioma              TEXT
+poster_path         TEXT
+generos             TEXT
+diretor             TEXT
+elenco              TEXT
+
+
+Funções importantes:
+- conectar()
+- criar_tabela()
+- atualizar_tabela()
+- inserir_conteudo()
+- listar_filmes()
+- buscar_filme_por_id()
+- buscar_filmes()
+- filmes_melhor_avaliados()
+- filmes_populares()
+
+
+IMPORTANTE:
+Ao adicionar uma nova coluna ao banco, atualizar:
+1. banco.py
+2. importação dos dados
+3. transformar_filme() no app.py
+4. frontend que irá consumir o dado
+
+
+4.3 importar_filmes.py
+----------------------
+
+Responsabilidade:
+- Consultar a API do TMDB.
+- Pegar dados dos filmes.
+- Transformar os dados no formato usado pelo CineLog.
+- Inserir no SQLite.
+
+Atualmente importa filmes populares.
+
+Token do TMDB:
+- Fica no .env.
+- Nunca colocar o token diretamente no código ou publicar no GitHub.
+
+
+================================
+5. API ATUAL
+================================
+
+GET /api/filmes
+→ Lista filmes.
+
+GET /api/filmes/buscar?q=TERMO
+→ Busca filmes pelo título.
+
+GET /api/filmes/avaliados
+→ Lista filmes ordenados pela nota.
+
+GET /api/filmes/populares
+→ Lista filmes ordenados pela popularidade.
+
+GET /api/filmes/{tmdb_id}
+→ Retorna um filme específico.
+
+
+Exemplo:
+
+/api/filmes/634649
+
+Retorna os dados do Spider-Man: No Way Home quando ele existe no banco.
+
+
+================================
+6. FRONTEND — REACT
+================================
+
+Tecnologias:
+- React
+- Vite
+- React Router
+- JavaScript
+- CSS
+
+
+6.1 App.jsx
+-----------
+
+Responsabilidade:
+- Página inicial.
+- Buscar dados da API.
+- Armazenar listas de filmes.
+- Renderizar Hero e seções.
+- Participar da configuração das rotas.
+
+Estados atuais:
+- filmes
+- populares
+- avaliados
+
+
+Página inicial possui:
+- Header
+- HeroFilmes
+- Em destaque
+- Mais bem avaliados
+- Filmes
+- Séries (estrutura preparada)
+- Animes (estrutura preparada)
+
+
+6.2 Header.jsx
+--------------
+
+Responsabilidade:
+- Cabeçalho principal.
+- Navegação/interface superior.
+
+
+6.3 HeroFilmes.jsx
+------------------
+
+Responsabilidade:
+- Exibir os filmes mais bem avaliados em destaque.
+- Possui navegação/arraste.
+- Mostra um filme ativo por vez.
+- Usa poster do TMDB.
+
+
+6.4 SecaoConteudos.jsx
+----------------------
+
+Responsabilidade:
+- Componente reutilizável para seções de conteúdo.
+- Recebe título e lista de conteúdos.
+- Exibe cards.
+
+
+================================
+7. PÁGINA INDIVIDUAL DO FILME
+================================
+
+Arquivo:
+
+pages/Filme.jsx
+
+Estilos:
+
+pages/Filme.css
+
+
+A página atualmente possui:
+
+- Botão Voltar.
+- Poster.
+- Fundo usando o poster.
+- Overlay escuro.
+- Tipo de conteúdo.
+- Título.
+- Título original.
+- Nota TMDB.
+- Data de lançamento.
+- Direção.
+- Sinopse.
+- Gêneros.
+- Botão Avaliar filme.
+- Botão Favoritar.
+- Área de Reviews.
+- Estrutura preparada para novas informações.
+
+
+Estrutura visual desejada:
+
+Poster
+        +
+Título
+        +
+Informações rápidas
+[ TMDB ] [ Lançamento ] [ Direção ]
+
+Sinopse
+
+Gêneros
+[ Ação ] [ Aventura ] [ Thriller ]
+
+Ações
+[ Avaliar ] [ Favoritar ] [ Watchlist ]
+
+Reviews
+
+Elenco
+
+Onde assistir
+
+
+================================
+8. AVALIAÇÃO
+================================
+
+Já implementado.
+
+Fluxo:
+
+Usuário clica em:
+"⭐ Avaliar filme"
+
+ ↓
+
+Abre modal.
+
+ ↓
+
+Usuário escolhe nota de 1 a 10.
+
+ ↓
+
+Nota selecionada fica em:
+notaSelecionada
+
+ ↓
+
+Usuário confirma.
+
+ ↓
+
+Nota é salva no localStorage.
+
+Chave utilizada:
+
+avaliacao_filme_{tmdb_id}
+
+ ↓
+
+minhaNota recebe a nota.
+
+ ↓
+
+Modal fecha.
+
+O botão passa a mostrar a avaliação do usuário.
+
+
+IMPORTANTE:
+A avaliação atualmente é LOCAL.
+Ainda não existe sistema de usuário/banco para avaliações.
+
+Futuro:
+
+React
+ ↓
+Flask
+ ↓
+SQLite
+ ↓
+usuário + filme + nota
+
+
+================================
+9. FAVORITOS
+================================
+
+Já existe a estrutura inicial.
+
+Estado:
+
+favoritado
+
+LocalStorage:
+
+favorito_filme_{id}
+
+Fluxo:
+
+Usuário clica em Favoritar
+ ↓
+salva no localStorage
+ ↓
+estado favoritado é atualizado
+ ↓
+interface muda.
+
+
+Futuro:
+Migrar favoritos do localStorage para banco quando existir sistema de usuário.
+
+
+================================
+10. GÊNEROS
+================================
+
+Já implementado.
+
+Banco:
+generos
+
+Formato atual:
+texto separado por vírgula.
+
+Exemplo:
+
+Action, Science Fiction, Thriller
+
+No React:
+
+filme.generos
+ ↓
+split(",")
+ ↓
+map()
+ ↓
+array de gêneros
+ ↓
+generos.map()
+ ↓
+badges na interface
+
+
+Visual:
+- Pills arredondadas.
+- Borda sutil.
+- Fundo transparente/laranja.
+- Hover com animação.
+
+
+================================
+11. DIRETOR
+================================
+
+Já implementado.
+
+Banco:
+diretor
+
+Interface:
+- Aparece junto das informações rápidas.
+- Deve funcionar como um card semelhante aos cards de TMDB e lançamento.
+- Não deve ocupar largura exagerada.
+- Direção é considerada informação básica do filme.
+
+
+================================
+12. ELENCO
+================================
+
+PRÓXIMO PASSO.
+
+Dados:
+- Nome do ator.
+- Personagem.
+- Foto.
+- ID do ator.
+
+Objetivo visual:
+Cards horizontais.
+Foto do ator.
+Nome.
+Personagem.
+
+Preferência:
+- Visual limpo.
+- Scroll horizontal.
+- Fluido.
+- Hover.
+- Responsivo.
+
+Limitar inicialmente a aproximadamente 8 atores na página.
+
+
+================================
+13. ONDE ASSISTIR
+================================
+
+PRÓXIMO / FUTURO.
+
+Objetivo:
+Uma seção pequena e minimalista.
+
+Exemplo:
+
+ONDE ASSISTIR
+
+[ Netflix ] [ Prime Video ] [ Disney+ ]
+
+
+Não deve ocupar muito espaço da página principal.
+
+Usar ícones/logos quando houver dados confiáveis.
+
+
+================================
+14. WATCHLIST
+================================
+
+Futuro próximo.
+
+Botão deve existir na página do filme mesmo antes do sistema de usuário.
+
+Objetivo:
+Preparar a interface para:
+
+Adicionar à watchlist
+Remover da watchlist
+
+Inicialmente pode usar localStorage.
+
+Futuramente:
+usuário → banco → watchlist.
+
+
+================================
+15. REVIEWS
+================================
+
+Estrutura visual já existe.
+
+Atualmente:
+"Nenhuma review ainda"
+
+Objetivo futuro:
+- Escrever review.
+- Editar review.
+- Excluir review.
+- Exibir reviews da comunidade.
+- Associar review a usuário e filme.
+- Possivelmente permitir nota junto da review.
+
+
+================================
+16. SISTEMA DE USUÁRIO
+================================
+
+FUTURO.
+
+Possíveis recursos:
+- Cadastro.
+- Login.
+- Perfil.
+- Foto/avatar.
+- Filmes favoritos.
+- Watchlist.
+- Filmes avaliados.
+- Reviews.
+- Histórico.
+- Estatísticas.
+
+
+================================
+17. CATEGORIAS
+================================
+
+FUTURO.
+
+A ideia é aproveitar os gêneros dos filmes para criar uma área de categorias.
+
+Exemplos:
+
+Ação
+Comédia
+Terror
+Ficção Científica
+Drama
+Thriller
+Aventura
+Fantasia
+
+
+Uma categoria poderá futuramente listar conteúdos daquele gênero.
+
+
+================================
+18. ESTATÍSTICAS
+================================
+
+FUTURO.
+
+Possíveis dados:
+- Filmes assistidos.
+- Média das avaliações.
+- Gênero mais assistido.
+- Filmes favoritos.
+- Filmes por ano.
+- Tempo total assistido.
+
+
+================================
+19. APARÊNCIA DA PÁGINA DO FILME
+================================
+
+Visual atual:
+- Fundo preto/escuro.
+- Poster grande à esquerda.
+- Informações à direita.
+- Fundo com poster desfocado/escurecido.
+- Cards transparentes.
+- Laranja como destaque.
+- Tipografia forte.
+- Gêneros em pills.
+- Botões de ação.
+
+
+IDEIAS FUTURAS:
+- Tornar o fade do poster de fundo um pouco mais visível.
+- Melhorar profundidade do background.
+- Adicionar animações sutis.
+- Melhorar responsividade.
+- Microinterações.
+- Transições suaves.
+
+
+================================
+20. COMO PENSAR AO IMPLEMENTAR
+================================
+
+NUNCA começar imediatamente pelo JSX.
+
+Antes de programar uma funcionalidade, responder:
+
+1. O que estou criando?
+
+2. De onde vem o dado?
+
+3. O dado precisa ser salvo?
+
+4. Se precisa ser salvo:
+   → SQLite?
+   → localStorage?
+   → futuramente conta do usuário?
+
+5. Qual tabela/coluna precisa existir?
+
+6. O backend precisa de uma nova função?
+
+7. O Flask precisa de uma nova rota?
+
+8. O JSON da API precisa mudar?
+
+9. Qual componente React vai receber o dado?
+
+10. Preciso de useState?
+
+11. Preciso de useEffect?
+
+12. Qual JSX vai mostrar o dado?
+
+13. Qual CSS vai controlar a aparência?
+
+14. Preciso testar:
+   → banco
+   → API
+   → React
+   → interface?
+
+
+REGRA MENTAL:
+
+DADO
+ ↓
+BANCO
+ ↓
+BACKEND
+ ↓
+API
+ ↓
+REACT
+ ↓
+COMPONENTE
+ ↓
+CSS
+
+
+================================
+21. EXEMPLO — ADICIONAR ELENCO
+================================
+
+Antes de escrever código:
+
+ELENCO
+ ↓
+TMDB fornece dados
+ ↓
+importar_filmes.py pega dados
+ ↓
+SQLite salva
+ ↓
+banco.py possui coluna/função
+ ↓
+app.py envia elenco na API
+ ↓
+Filme.jsx recebe filme.elenco
+ ↓
+JSON.parse()
+ ↓
+elenco.map()
+ ↓
+cards de atores
+ ↓
+Filme.css estiliza cards
+
+
+Somente depois começar a implementar.
+
+
+================================
+22. COMO TESTAR
+================================
+
+Backend:
+
+cd backend
+python app.py
+
+
+Frontend:
+
+cd frontend/cinelog-react
+npm run dev
+
+
+Existe também um .bat para iniciar os dois.
+
+
+Testar API diretamente:
+
+http://127.0.0.1:5000/api/filmes
+
+http://127.0.0.1:5000/api/filmes/populares
+
+http://127.0.0.1:5000/api/filmes/avaliados
+
+http://127.0.0.1:5000/api/filmes/634649
+
+
+Se a API funcionar mas o React não:
+→ problema provavelmente está no frontend.
+
+Se o React pedir dados mas a API retornar 404:
+→ problema provavelmente está no backend/rota.
+
+Se a API não possuir o dado:
+→ verificar banco/importação/TMDB.
+
+
+================================
+23. ERROS IMPORTANTES JÁ ENCONTRADOS
+================================
+
+1. Flask retornava 404 para filme específico.
+   Causa: backend que estava executando não possuía a rota nova.
+   Solução: reiniciar o Flask com o app atualizado.
+
+2. Invalid hook call no React.
+   Causa encontrada no contexto do projeto: conflito/duplicidade de instalação do React.
+   Verificação:
+   npm ls react react-dom react-router-dom
+
+   Atualmente:
+   React 19.2.8
+   React DOM 19.2.8
+   React Router DOM 7.18.2
+
+
+3. ImportError de atualizar_conteudo.
+   Causa: a função existente era atualizar_tabela(), não atualizar_conteudo().
+   Regra:
+   Não importar função que não existe.
+
+
+4. NameError:
+   return filmes dentro de atualizar_tabela().
+   Causa: filmes não existia dentro daquela função.
+   Solução: remover return filmes.
+
+
+5. TypeError:
+   'NoneType' object is not iterable.
+   Causa: alguma função de banco estava retornando None em vez de lista.
+
+
+6. Problemas com comandos PowerShell.
+   Atenção:
+   Não misturar comandos de PowerShell com sintaxe de CMD.
+
+
+================================
+24. GIT / COMMITS
+================================
+
+Fazer commits pequenos e claros.
+
+Exemplos:
+
+feat: adiciona página individual de filmes
+
+feat: adiciona sistema de avaliação
+
+feat: adiciona favoritos
+
+feat: adiciona gêneros e diretor aos filmes
+
+style: melhora visual da página de filme
+
+fix: corrige modal de avaliação
+
+refactor: reorganiza dados dos filmes
+
+
+Antes de commit:
+- testar frontend.
+- testar backend.
+- verificar console.
+- verificar API.
+
+
+================================
+25. ROADMAP
+================================
+
+CONCLUÍDO
+[✓] React configurado
+[✓] React Router
+[✓] Página inicial
+[✓] Hero
+[✓] Cards de filmes
+[✓] Página individual
+[✓] Busca por filme
+[✓] API Flask
+[✓] SQLite
+[✓] Importação TMDB
+[✓] Avaliação local
+[✓] Favorito local
+[✓] Gêneros
+[✓] Diretor
+[✓] Elenco
+
+
+EM ANDAMENTO
+[ ] Onde assistir
+
+
+PRÓXIMOS
+[ ] Watchlist
+[ ] Reviews funcionais
+[ ] Melhorar background/fade
+[ ] Melhorar responsividade
+[ ] Melhorar animações
+
+
+FUTURO
+[ ] Séries
+[ ] Animes
+[ ] Categorias
+[ ] Sistema de usuário
+[ ] Login
+[ ] Perfil
+[ ] Favoritos persistentes no banco
+[ ] Watchlist persistente no banco
+[ ] Reviews persistentes no banco
+[ ] Estatísticas
+[ ] Recomendações
+[ ] Histórico
+
+
+================================
+26. REGRA DE OURO DO PROJETO
+================================
+
+O CineLog não deve ser desenvolvido tentando lembrar tudo de cabeça.
+
+Antes de implementar qualquer coisa:
+
+1. Consultar este mapa.
+2. Definir o fluxo do dado.
+3. Alterar uma camada por vez.
+4. Testar a camada.
+5. Só então passar para a próxima.
+6. Atualizar este arquivo quando a arquitetura mudar.
+
+O objetivo não é apenas fazer o CineLog funcionar.
+
+O objetivo é aprender a construir um sistema completo entendendo
+POR QUE cada parte existe e COMO as partes se comunicam.
