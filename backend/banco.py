@@ -1,6 +1,7 @@
 import sqlite3
 import os
 
+
 CAMINHO_BANCO = os.path.join(os.path.dirname(__file__), "cinelog.db")
 
 def conectar():
@@ -62,6 +63,45 @@ def inserir_conteudo(conteudo):
 
     conexao.commit()
     conexao.close()
+
+def atualizar_conteudo(conteudo):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE conteudos
+        SET
+            titulo = ?,
+            titulo_original = ?,
+            sinopse = ?,
+            data_lancamento = ?,
+            nota_tmdb = ?,
+            popularidade = ?,
+            idioma = ?,
+            poster_path = ?,
+            generos = ?,
+            diretor = ?,
+            elenco = ?
+        WHERE tmdb_id = ?
+    """, (
+        conteudo["titulo"],
+        conteudo["titulo_original"],
+        conteudo["sinopse"],
+        conteudo["data_lancamento"],
+        conteudo["nota_tmdb"],
+        conteudo["popularidade"],
+        conteudo["idioma"],
+        conteudo["poster_path"],
+        conteudo["generos"],
+        conteudo["diretor"],
+        conteudo["elenco"],
+        conteudo["tmdb_id"]
+    ))
+
+    conexao.commit()
+    conexao.close()
+
+
 def listar_filmes():
     conexao = conectar()
     cursor = conexao.cursor()
@@ -145,10 +185,33 @@ def filmes_populares():
     filmes = cursor.fetchall()
 
     conexao.close()
-
     return filmes
+
+def atualizar_tabela():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    colunas = [
+        ("generos", "TEXT"),
+        ("diretor", "TEXT"),
+        ("elenco", "TEXT")
+    ]
+
+    for nome, tipo in colunas:
+        try:
+            cursor.execute(
+                f"ALTER TABLE conteudos ADD COLUMN {nome} {tipo}"
+            )
+        except sqlite3.OperationalError:
+            pass
+
+    conexao.commit()
+    conexao.close()
+
+
 if __name__ == "__main__":
     criar_tabela()
+    atualizar_tabela()
 
     filmes = filmes_populares()
 

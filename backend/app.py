@@ -23,7 +23,10 @@ def transformar_filme(filme):
         "nota_tmdb": filme[7],
         "popularidade": filme[8],
         "idioma": filme[9],
-        "poster_path": filme[10]
+        "poster_path": filme[10],
+        "generos": filme[11],
+        "diretor": filme[12],
+        "elenco": filme[13]
     }
 
 

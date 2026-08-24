@@ -1,136 +1,84 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
-import {
-    BrowserRouter,
-    Routes,
-    Route
-} from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Header from './components/Header'
-import SecaoConteudos from './components/SecaoConteudos'
-import HeroFilmes from './components/HeroFilmes'
-import Filme from './pages/Filme'
+import Header from "./components/Header";
+import SecaoConteudos from "./components/SecaoConteudos";
+import HeroFilmes from "./components/HeroFilmes";
+import Filme from "./pages/Filme";
 
-import './App.css'
-
+import "./App.css";
 
 function Home() {
+  const [filmes, setFilmes] = useState([]);
+  const [populares, setPopulares] = useState([]);
+  const [avaliados, setAvaliados] = useState([]);
 
-    const [filmes, setFilmes] = useState([])
-    const [populares, setPopulares] = useState([])
-    const [avaliados, setAvaliados] = useState([])
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/api/filmes")
+      .then((resposta) => resposta.json())
+      .then((dados) => setFilmes(dados))
+      .catch((erro) => console.error("Erro ao carregar filmes:", erro));
 
-    useEffect(() => {
+    fetch("http://127.0.0.1:5000/api/filmes/populares")
+      .then((resposta) => resposta.json())
+      .then((dados) => setPopulares(dados))
+      .catch((erro) => console.error("Erro ao carregar populares:", erro));
 
-        fetch('http://127.0.0.1:5000/api/filmes')
-            .then(resposta => resposta.json())
-            .then(dados => setFilmes(dados))
-            .catch(erro =>
-                console.error('Erro ao carregar filmes:', erro)
-            )
+    fetch("http://127.0.0.1:5000/api/filmes/avaliados")
+      .then((resposta) => resposta.json())
+      .then((dados) => setAvaliados(dados))
+      .catch((erro) => console.error("Erro ao carregar avaliados:", erro));
+  }, []);
 
-        fetch('http://127.0.0.1:5000/api/filmes/populares')
-            .then(resposta => resposta.json())
-            .then(dados => setPopulares(dados))
-            .catch(erro =>
-                console.error('Erro ao carregar populares:', erro)
-            )
+  return (
+    <>
+      <Header />
 
-        fetch('http://127.0.0.1:5000/api/filmes/avaliados')
-            .then(resposta => resposta.json())
-            .then(dados => setAvaliados(dados))
-            .catch(erro =>
-                console.error('Erro ao carregar avaliados:', erro)
-            )
+      <main className="home">
+        <HeroFilmes filmes={avaliados} />
 
-    }, [])
+        <section className="hero">
+          <span>CINELOG</span>
 
-    return (
-        <>
-            <Header />
+          <h1>Seu universo de filmes, séries e animes.</h1>
 
-            <main className="home">
+          <p>Descubra, avalie e organize tudo o que você assiste.</p>
 
-                <HeroFilmes filmes={avaliados} />
+          <div className="barra-busca">
+            <span>⌕</span>
 
-                <section className="hero">
+            <input
+              type="text"
+              placeholder="Buscar filmes, séries e animes..."
+            />
+          </div>
+        </section>
 
-                    <span>CINELOG</span>
+        <SecaoConteudos titulo=" Em destaque" conteudos={populares} />
 
-                    <h1>
-                        Seu universo de filmes, séries e animes.
-                    </h1>
+        <SecaoConteudos titulo=" Mais bem avaliados" conteudos={avaliados} />
 
-                    <p>
-                        Descubra, avalie e organize tudo o que você assiste.
-                    </p>
+        <SecaoConteudos titulo=" Filmes" conteudos={filmes} />
 
-                    <div className="barra-busca">
+        <SecaoConteudos titulo=" Séries" conteudos={[]} />
 
-                        <span>⌕</span>
-
-                        <input
-                            type="text"
-                            placeholder="Buscar filmes, séries e animes..."
-                        />
-
-                    </div>
-
-                </section>
-
-
-                <SecaoConteudos
-                    titulo="🔥 Em destaque"
-                    conteudos={populares}
-                />
-
-                <SecaoConteudos
-                    titulo="⭐ Mais bem avaliados"
-                    conteudos={avaliados}
-                />
-
-                <SecaoConteudos
-                    titulo="🎬 Filmes"
-                    conteudos={filmes}
-                />
-
-                <SecaoConteudos
-                    titulo="📺 Séries"
-                    conteudos={[]}
-                />
-
-                <SecaoConteudos
-                    titulo="🎌 Animes"
-                    conteudos={[]}
-                />
-
-            </main>
-        </>
-    )
+        <SecaoConteudos titulo=" Animes" conteudos={[]} />
+      </main>
+    </>
+  );
 }
-
 
 function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-    return (
-        <BrowserRouter>
-
-            <Routes>
-
-                <Route
-                    path="/"
-                    element={<Home />}
-                />
-
-                <Route
-                    path="/filmes/:id"
-                    element={<Filme />}
-                />
-
-            </Routes>
-
-        </BrowserRouter>
-    )
+        <Route path="/filmes/:id" element={<Filme />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
