@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function CardConteudo({ conteudo }) {
 
     const posterUrl = conteudo.poster_path
@@ -5,32 +7,39 @@ function CardConteudo({ conteudo }) {
         : null
 
     return (
-        <article className="card-conteudo">
+        <Link
+            to={`/filmes/${conteudo.tmdb_id}`}
+            className="card-link"
+        >
+            <article className="card-conteudo">
 
-            <div className="poster">
-                {posterUrl ? (
-                    <img
-                        src={posterUrl}
-                        alt={conteudo.titulo}
-                    />
-                ) : (
-                    <span>{conteudo.titulo}</span>
-                )}
-            </div>
+                <div className="poster">
 
-            <div className="info-conteudo">
+                    {posterUrl ? (
+                        <img
+                            src={posterUrl}
+                            alt={conteudo.titulo}
+                        />
+                    ) : (
+                        <span>{conteudo.titulo}</span>
+                    )}
 
-                <h3>{conteudo.titulo}</h3>
+                </div>
 
-                <span>{conteudo.tipo}</span>
+                <div className="info-conteudo">
 
-                <strong>
-                    ⭐ {Number(conteudo.nota_tmdb).toFixed(1)}/10
-                </strong>
+                    <h3>{conteudo.titulo}</h3>
 
-            </div>
+                    <span>{conteudo.tipo}</span>
 
-        </article>
+                    <strong>
+                        ⭐ {Number(conteudo.nota_tmdb).toFixed(1)}/10
+                    </strong>
+
+                </div>
+
+            </article>
+        </Link>
     )
 }
 

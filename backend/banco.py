@@ -78,6 +78,22 @@ def listar_filmes():
 
     return filmes
 
+def buscar_filme_por_id(tmdb_id):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM conteudos
+        WHERE tipo = 'filme'
+        AND tmdb_id = ?
+    """, (tmdb_id,))
+
+    filme = cursor.fetchone()
+
+    conexao.close()
+
+    return filme
 
 def buscar_filmes(termo):
     conexao = conectar()

@@ -4,9 +4,9 @@ from banco import (
     listar_filmes,
     buscar_filmes,
     filmes_melhor_avaliados,
-    filmes_populares
+    filmes_populares,
+    buscar_filme_por_id
 )
-
 app = Flask(__name__)
 CORS(app)
 
@@ -68,6 +68,17 @@ def populares():
         for filme in resultados
     ])
 
+@app.route("/api/filmes/<int:tmdb_id>")
+def filme_por_id(tmdb_id):
+
+    filme = buscar_filme_por_id(tmdb_id)
+
+    if filme is None:
+        return jsonify({
+            "erro": "Filme não encontrado"
+        }), 404
+
+    return jsonify(transformar_filme(filme))
 
 if __name__ == "__main__":
     app.run()
