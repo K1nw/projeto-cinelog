@@ -293,10 +293,10 @@ Mais do que apenas criar uma aplicação, o objetivo é acompanhar a evolução 
 
 ## 📷 Preview
 
-Em breve.
 
-<img width="1889" height="909" alt="Captura de tela 2026-08-24 225444" src="https://github.com/user-attachments/assets/fde5e4b6-d0ac-4be4-8d67-3676535648ce" />
 <img width="1894" height="908" alt="Captura de tela 2026-08-24 225432" src="https://github.com/user-attachments/assets/f1fabee8-e3cd-48db-a58e-4214eefdd2a9" />
+<img width="1889" height="909" alt="Captura de tela 2026-08-24 225444" src="https://github.com/user-attachments/assets/fde5e4b6-d0ac-4be4-8d67-3676535648ce" />
+
 
 
 
