@@ -4,6 +4,17 @@ Um sistema de gerenciamento e descoberta de filmes, séries e animes inspirado e
 
 ## 📖 Sobre o projeto
 
+
+## 📷 Preview
+
+<img width="1894" height="908" alt="Captura de tela 2026-08-24 225432" src="https://github.com/user-attachments/assets/f1fabee8-e3cd-48db-a58e-4214eefdd2a9" />
+
+
+
+<img width="1889" height="909" alt="Captura de tela 2026-08-24 225444" src="https://github.com/user-attachments/assets/fde5e4b6-d0ac-4be4-8d67-3676535648ce" />
+
+
+
 O CineLog começou como uma aplicação de terminal desenvolvida em Python e evoluiu gradualmente para uma aplicação web.
 
 O projeto está sendo desenvolvido em etapas, acompanhando minha evolução como desenvolvedor e permitindo aplicar na prática conceitos de:
@@ -290,15 +301,6 @@ O CineLog faz parte do meu portfólio e está sendo desenvolvido para praticar c
 Mais do que apenas criar uma aplicação, o objetivo é acompanhar a evolução do projeto desde um CRUD simples até uma aplicação Full Stack completa.
 
 ---
-
-## 📷 Preview
-
-
-<img width="1894" height="908" alt="Captura de tela 2026-08-24 225432" src="https://github.com/user-attachments/assets/f1fabee8-e3cd-48db-a58e-4214eefdd2a9" />
-<img width="1889" height="909" alt="Captura de tela 2026-08-24 225444" src="https://github.com/user-attachments/assets/fde5e4b6-d0ac-4be4-8d67-3676535648ce" />
-
-
-
 
 ## 👨‍💻 Autor
 
