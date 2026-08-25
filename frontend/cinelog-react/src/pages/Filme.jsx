@@ -13,6 +13,10 @@ function Filme() {
   const [mostrarAvaliacao, setMostrarAvaliacao] = useState(false);
   const [minhaNota, setMinhaNota] = useState(null);
   const [notaSelecionada, setNotaSelecionada] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [mostrarReview, setMostrarReview] = useState(false);
+  const [notaReview, setNotaReview] = useState(0);
+  const [textoReview, setTextoReview] = useState("");
   const generos = filme?.generos
     ? filme.generos.split(",").map((genero) => genero.trim())
     : [];
@@ -39,6 +43,7 @@ function Filme() {
       })
       .then((dados) => {
         setFilme(dados);
+
         const avaliacaoSalva = localStorage.getItem(
           `avaliacao_filme_${dados.tmdb_id}`,
         );
@@ -50,12 +55,61 @@ function Filme() {
         const favoritoSalvo = localStorage.getItem(
           `favorito_filme_${dados.tmdb_id}`,
         );
+
         if (favoritoSalvo === "true") {
           setFavoritado(true);
         }
+
+        // Buscar reviews do filme
+        return fetch(
+          `http://127.0.0.1:5000/api/conteudos/${dados.tmdb_id}/reviews`,
+        );
+      })
+      .then((resposta) => {
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar reviews");
+        }
+
+        return resposta.json();
+      })
+      .then((dados) => {
+        console.log("REVIEWS RECEBIDAS:", dados);
+
+        setReviews(dados);
+        setCarregando(false);
+      })
+      .catch((erro) => {
+        console.error("Erro:", erro);
+
+        setErro(true);
         setCarregando(false);
       });
   }, [id]);
+
+  const excluirReview = async (reviewId) => {
+    try {
+      const resposta = await fetch(
+        `http://127.0.0.1:5000/api/reviews/${reviewId}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        alert(dados.erro || "Erro ao excluir review.");
+        return;
+      }
+
+      setReviews((reviewsAtuais) =>
+        reviewsAtuais.filter((review) => review.id !== reviewId),
+      );
+    } catch (erro) {
+      console.error("Erro ao excluir review:", erro);
+      alert("Não foi possível excluir a review.");
+    }
+  };
 
   if (carregando) {
     return (
@@ -279,22 +333,170 @@ function Filme() {
       </section>
 
       <section className="filme-reviews">
+        {mostrarReview &&
+          createPortal(
+            <div
+              className="modal-fundo"
+              onClick={() => setMostrarReview(false)}
+            >
+              <div
+                className="modal-review"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="fechar-modal"
+                  onClick={() => setMostrarReview(false)}
+                >
+                  ×
+                </button>
+
+                <span className="modal-label">SUA REVIEW</span>
+
+                <h2>O que você achou?</h2>
+
+                <p className="modal-review-filme">{filme.titulo}</p>
+
+                <div className="review-modal-nota">
+                  <span>SUA NOTA</span>
+
+                  <div className="notas">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((nota) => (
+                      <button
+                        type="button"
+                        key={nota}
+                        className={nota === notaReview ? "nota ativa" : "nota"}
+                        onClick={() => setNotaReview(nota)}
+                      >
+                        {nota}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="nota-atual">
+                    {notaReview ? `${notaReview}/10` : "Escolha uma nota"}
+                  </div>
+                </div>
+
+                <div className="campo-review">
+                  <label htmlFor="texto-review">SUA OPINIÃO</label>
+
+                  <textarea
+                    id="texto-review"
+                    value={textoReview}
+                    maxLength={1500}
+                    onChange={(e) => setTextoReview(e.target.value)}
+                    placeholder="Escreva o que você achou desse filme..."
+                    rows="6"
+                  />
+
+                  <small className="contador-caracteres">
+                    {textoReview.length}/1500
+                  </small>
+                </div>
+
+                <button
+                  type="button"
+                  className="confirmar-review"
+                  disabled={!notaReview || !textoReview.trim()}
+                  onClick={async () => {
+                    try {
+                      const resposta = await fetch(
+                        `http://127.0.0.1:5000/api/conteudos/${id}/reviews`,
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            user_id: 1,
+                            nota: notaReview,
+                            texto: textoReview.trim(),
+                          }),
+                        },
+                      );
+
+                      const dados = await resposta.json();
+
+                      if (!resposta.ok) {
+                        alert(dados.erro || "Erro ao publicar review.");
+                        return;
+                      }
+
+                      setMostrarReview(false);
+
+                      setNotaReview(0);
+                      setTextoReview("");
+
+                      const reviewsAtualizadas = await fetch(
+                        `http://127.0.0.1:5000/api/conteudos/${id}/reviews`,
+                      );
+
+                      const novasReviews = await reviewsAtualizadas.json();
+
+                      setReviews(novasReviews);
+                    } catch (erro) {
+                      console.error("Erro ao publicar review:", erro);
+                      alert("Não foi possível publicar a review.");
+                    }
+                  }}
+                >
+                  Publicar review
+                </button>
+              </div>
+            </div>,
+            document.body,
+          )}
+
         <div className="titulo-reviews">
           <div>
             <span>OPINIÃO DA COMUNIDADE</span>
             <h2>Reviews</h2>
           </div>
 
-          <button>+ Escrever review</button>
+          <button type="button" onClick={() => setMostrarReview(true)}>
+            + Escrever review
+          </button>
         </div>
 
-        <div className="review-vazio">
-          <span>✦</span>
+        {reviews.length === 0 ? (
+          <div className="review-vazio">
+            <span>✦</span>
 
-          <h3>Nenhuma review ainda</h3>
+            <h3>Nenhuma review ainda</h3>
 
-          <p>Seja o primeiro a compartilhar sua opinião sobre este filme.</p>
-        </div>
+            <p>Seja o primeiro a compartilhar sua opinião sobre este filme.</p>
+          </div>
+        ) : (
+          <div className="reviews-lista">
+            {reviews.map((review) => (
+              <article key={review.id} className="review-card">
+                <div className="review-card-topo">
+                  <strong>{review.username}</strong>
+
+                  <span className="review-nota">⭐ {review.nota}/10</span>
+
+                  {review.user_id === 1 && (
+                    <button
+                      type="button"
+                      className="botao-excluir-review"
+                      onClick={() => excluirReview(review.id)}
+                      title="Excluir minha review"
+                    >
+                      🗑️
+                    </button>
+                  )}
+                </div>
+
+                <p className="review-texto">{review.texto}</p>
+
+                <small className="review-data">
+                  {new Date(review.created_at).toLocaleDateString("pt-BR")}
+                </small>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
