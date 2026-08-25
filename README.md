@@ -4,17 +4,6 @@ Um sistema de gerenciamento e descoberta de filmes, séries e animes inspirado e
 
 ## 📖 Sobre o projeto
 
-
-## 📷 Preview
-
-<img width="1894" height="908" alt="Captura de tela 2026-08-24 225432" src="https://github.com/user-attachments/assets/f1fabee8-e3cd-48db-a58e-4214eefdd2a9" />
-
-
-
-<img width="1889" height="909" alt="Captura de tela 2026-08-24 225444" src="https://github.com/user-attachments/assets/fde5e4b6-d0ac-4be4-8d67-3676535648ce" />
-
-
-
 O CineLog começou como uma aplicação de terminal desenvolvida em Python e evoluiu gradualmente para uma aplicação web.
 
 O projeto está sendo desenvolvido em etapas, acompanhando minha evolução como desenvolvedor e permitindo aplicar na prática conceitos de:
@@ -30,9 +19,18 @@ O projeto está sendo desenvolvido em etapas, acompanhando minha evolução como
 
 O objetivo é transformar o projeto inicial de CRUD em uma plataforma completa para descobrir, organizar e avaliar conteúdos.
 
+
+## 📷 Preview
+
+<img width="1894" height="908" alt="Captura de tela 2026-08-24 225432" src="https://github.com/user-attachments/assets/f1fabee8-e3cd-48db-a58e-4214eefdd2a9" />
+
+
+
+<img width="1889" height="909" alt="Captura de tela 2026-08-24 225444" src="https://github.com/user-attachments/assets/fde5e4b6-d0ac-4be4-8d67-3676535648ce" />
+
 ---
 
-## 🚀 Tecnologias
+##  Tecnologias
 
 ### Frontend
 
@@ -66,7 +64,7 @@ O objetivo é transformar o projeto inicial de CRUD em uma plataforma completa p
 
 ---
 
-## ✨ Funcionalidades atuais
+## Funcionalidades atuais
 
 * ✅ Interface web em React
 * ✅ Home do CineLog
@@ -112,7 +110,7 @@ A ideia é que o CineLog não dependa diretamente do TMDB para armazenar seus co
 
 ---
 
-## 🗄️ Banco de dados
+##  Banco de dados
 
 Atualmente o projeto utiliza **SQLite**.
 
@@ -162,7 +160,7 @@ Essa rota retorna os filmes armazenados no banco em formato JSON.
 
 ---
 
-## 🎬 Integração com TMDB
+## Integração com TMDB
 
 O CineLog possui um processo de importação responsável por buscar filmes no TMDB e armazená-los no SQLite.
 
@@ -183,7 +181,7 @@ As credenciais da API são armazenadas através de variáveis de ambiente e não
 
 ---
 
-## 🎨 Frontend
+##  Frontend
 
 O frontend atualmente utiliza **React** e possui uma estrutura componentizada.
 
@@ -206,7 +204,7 @@ O `SecaoConteudos` controla as seções e o carrossel horizontal.
 
 ---
 
-## 🏠 Home
+## Home
 
 A página inicial atualmente possui seções destinadas a:
 
@@ -222,7 +220,7 @@ A separação completa entre essas categorias ainda está em desenvolvimento.
 
 ---
 
-## 🔜 Próximas funcionalidades
+##  Próximas funcionalidades
 
 ### Conteúdo
 
@@ -261,7 +259,7 @@ A separação completa entre essas categorias ainda está em desenvolvimento.
 
 ---
 
-## 🔐 Segurança
+##  Segurança
 
 O CineLog utiliza variáveis de ambiente para armazenar credenciais de APIs.
 
@@ -277,7 +275,7 @@ O projeto utiliza `.gitignore` para evitar o versionamento desses arquivos.
 
 ---
 
-## 🎯 Objetivo
+## Objetivo
 
 O CineLog faz parte do meu portfólio e está sendo desenvolvido para praticar conceitos de:
 
